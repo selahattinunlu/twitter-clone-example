@@ -1,7 +1,8 @@
-const Input = ({ label, value, onChange }) => {
+const Input = ({ label, type, value, onChange }) => {
   return (
     <label className="w-full block border border-gray-200 rounded-lg pt-6 pb-2 px-4 relative">
       <input
+        type={type}
         value={value}
         className="w-full outline-none peer"
         onChange={onChange}

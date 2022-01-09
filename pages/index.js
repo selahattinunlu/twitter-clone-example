@@ -1,11 +1,25 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 import TwitterLogo from "../assets/images/twitter-logo.svg";
 import SignupModal from "../components/SignupModal";
+import SigninModal from "../components/SigninModal";
+import supabase from "../lib/supabase";
 
 export default function Home() {
+  const router = useRouter();
+
   const [showSignupModal, setShowSignupModal] = useState(false);
+  const [showSigninModal, setShowSigninModal] = useState(false);
+
+  useEffect(() => {
+    const user = supabase.auth.user();
+
+    if (user) {
+      return router.push("/timeline");
+    }
+  }, []);
 
   return (
     <>
@@ -60,7 +74,10 @@ export default function Home() {
                     <h2 className="text-lg font-bold">
                       Already have an account?
                     </h2>
-                    <button className="mt-4 w-full py-2 px-6 border border-gray-200 text-primary rounded-full">
+                    <button
+                      onClick={() => setShowSigninModal(true)}
+                      className="mt-4 w-full py-2 px-6 border border-gray-200 text-primary rounded-full"
+                    >
                       Sign in
                     </button>
                   </div>
@@ -88,6 +105,11 @@ export default function Home() {
       <SignupModal
         open={showSignupModal}
         onClose={() => setShowSignupModal(false)}
+      />
+
+      <SigninModal
+        open={showSigninModal}
+        onClose={() => setShowSigninModal(false)}
       />
     </>
   );

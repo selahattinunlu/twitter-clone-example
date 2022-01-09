@@ -4,9 +4,12 @@ import TwitterLogo from "../assets/images/twitter-logo.svg";
 import Input from "./shared/Input";
 import Select from "./shared/Select";
 
+import supabase from "../lib/supabase";
+
 function SignupModal({ open, onClose }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
   const [day, setDay] = useState("");
@@ -46,6 +49,15 @@ function SignupModal({ open, onClose }) {
     return options;
   }, [year, month]);
 
+  const register = async (e) => {
+    e.preventDefault();
+
+    const { user, error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+  };
+
   return (
     <Dialog
       open={open}
@@ -62,17 +74,26 @@ function SignupModal({ open, onClose }) {
 
           <h2 className="text-2xl font-bold">Create your account</h2>
 
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={register}>
             <Input
+              type="text"
               label="Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
 
             <Input
+              type="email"
               label="E-mail"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+            />
+
+            <Input
+              type="password"
+              label="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
 
             <div>
@@ -120,11 +141,14 @@ function SignupModal({ open, onClose }) {
                 </div>
               </div>
             </div>
-          </form>
 
-          <button className="w-full py-2 px-6 text-center bg-primary text-white rounded-full">
-            Create my account
-          </button>
+            <button
+              type="submit"
+              className="w-full py-2 px-6 text-center bg-primary text-white rounded-full"
+            >
+              Create my account
+            </button>
+          </form>
         </div>
       </div>
     </Dialog>
