@@ -1,4 +1,26 @@
 import Image from "next/image";
+import { useState } from "react";
+import moment from "moment";
+
+moment.locale("en", {
+  relativeTime: {
+    future: "in %s",
+    past: "%s ago",
+    s: "seconds",
+    ss: "%ss",
+    m: "a minute",
+    mm: "%dm",
+    h: "an hour",
+    hh: "%dh",
+    d: "a day",
+    dd: "%dd",
+    M: "a month",
+    MM: "%dM",
+    y: "a year",
+    yy: "%dY",
+  },
+});
+
 import {
   DotsHorizontalIcon,
   HeartIcon,
@@ -6,7 +28,7 @@ import {
   ReplyIcon,
 } from "@heroicons/react/solid";
 
-const Tweet = () => {
+const Tweet = ({ tweet }) => {
   return (
     <div className="flex py-4 space-x-4">
       <div>
@@ -21,15 +43,17 @@ const Tweet = () => {
       <div className="flex-1">
         <header className="flex w-full justify-between">
           <div className="flex items-center space-x-1">
-            <div className="font-bold">John Doe</div>
-            <div className="text-gray-400">@johndoe</div>
-            <div className="text-gray-400">3h</div>
+            <div className="font-bold">{tweet.profile.name}</div>
+            <div className="text-gray-400">@{tweet.profile.username}</div>
+            <div className="text-gray-400">
+              {moment(tweet.created_at).fromNow(true)}
+            </div>
           </div>
           <button>
             <DotsHorizontalIcon className="w-4 h-4 text-gray-300" />
           </button>
         </header>
-        <div className="py-2">Hello World</div>
+        <div className="py-2">{tweet.body}</div>
         <footer className="flex space-x-8 items-center">
           <button className="text-gray-600">
             <ReplyIcon className="w-4 h-4" />

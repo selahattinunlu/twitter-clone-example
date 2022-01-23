@@ -8,6 +8,7 @@ import supabase from "../lib/supabase";
 
 function SignupModal({ open, onClose }) {
   const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [month, setMonth] = useState("");
@@ -56,6 +57,15 @@ function SignupModal({ open, onClose }) {
       email,
       password,
     });
+
+    const { data, error: updateError } = await supabase
+      .from("profiles")
+      .update({
+        name,
+        email,
+        username,
+      })
+      .eq("id", user.id);
   };
 
   return (
@@ -80,6 +90,13 @@ function SignupModal({ open, onClose }) {
               label="Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
+            />
+
+            <Input
+              type="text"
+              label="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
 
             <Input

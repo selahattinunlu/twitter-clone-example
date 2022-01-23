@@ -1,6 +1,21 @@
+import { useState } from "react";
 import Image from "next/image";
+import supabase from "../../lib/supabase";
 
 const TweetInput = () => {
+  const user = supabase.auth.user();
+  const [tweet, setTweet] = useState("");
+
+  const sendTweet = async (e) => {
+    e.preventDefault();
+
+    const { data, error } = await supabase.from("tweets").insert({
+      body: tweet,
+    });
+
+    console.log(data, error);
+  };
+
   return (
     <div className="flex space-x-4">
       <div>
@@ -15,12 +30,17 @@ const TweetInput = () => {
       <div className="flex-1">
         <textarea
           type="text"
+          value={tweet}
+          onChange={(e) => setTweet(e.target.value)}
           placeholder="What's happening?"
           className="w-full"
         ></textarea>
 
         <div className="flex justify-end mt-2">
-          <button className="bg-primary text-white py-2 px-6 rounded-full">
+          <button
+            onClick={sendTweet}
+            className="bg-primary text-white py-2 px-6 rounded-full"
+          >
             Tweet
           </button>
         </div>
